@@ -97,11 +97,11 @@ else()
     target_compile_options(webrtc-testlibs PRIVATE "-Wno-unused-parameter")
 endif()
 
-
 target_link_libraries(webrtc-testlibs
 	${WEBRTC_LIB_PATH})
 
-set_property(TARGET webrtc-testlibs PROPERTY CXX_STANDARD 14)
+set_property(TARGET webrtc-testlibs PROPERTY CXX_STANDARD 20)
+set_property(TARGET webrtc-testlibs PROPERTY CXX_STANDARD_REQUIRED ON)
 
 target_compile_definitions(webrtc-testlibs PUBLIC ${webrtc_COMMON_COMPILE_DEFS})
 
@@ -163,8 +163,14 @@ target_link_libraries(mediasoup-connector
 	${MEDIASOUP_SDP_LIB_PATH}
 	${mediasoup-connector_PLATFORM_DEPS})
 
+if(MSVC)
+	target_link_libraries(mediasoup-connector Iphlpapi.lib)
+endif()
+
 set_target_properties(mediasoup-connector PROPERTIES FOLDER "plugins")
-set_property(TARGET mediasoup-connector PROPERTY CXX_STANDARD 14)
+
+set_property(TARGET mediasoup-connector PROPERTY CXX_STANDARD 20)
+set_property(TARGET mediasoup-connector PROPERTY CXX_STANDARD_REQUIRED ON)
 
 target_compile_definitions(mediasoup-connector PUBLIC ${webrtc_COMMON_COMPILE_DEFS})
 

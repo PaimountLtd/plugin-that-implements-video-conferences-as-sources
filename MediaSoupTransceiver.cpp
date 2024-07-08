@@ -268,7 +268,7 @@ bool MediaSoupTransceiver::CreateVideoProducerTrack(const std::string &id, const
 			encodings.emplace_back(webrtc::RtpEncodingParameters{});
 		}
 
-		if (auto ptr = m_sendTransport->Produce(this, videoTrack, &encodings, codecOptions, codec)) {
+		if (auto ptr = m_sendTransport->Produce(this, videoTrack.get(), &encodings, codecOptions, codec)) {
 			AssignProducer(id, ptr, mailbox);
 		} else {
 			m_lastErorMsg = "MediaSoupTransceiver::CreateVideoProducerTrack - Transport failed to produce video";
@@ -318,7 +318,7 @@ bool MediaSoupTransceiver::CreateAudioProducerTrack(const std::string &id)
 
 		json codecOptions = {{"opusStereo", true}, {"opusDtx", true}};
 
-		if (auto ptr = m_sendTransport->Produce(this, audioTrack, nullptr, &codecOptions, nullptr)) {
+		if (auto ptr = m_sendTransport->Produce(this, audioTrack.get(), nullptr, &codecOptions, nullptr)) {
 			auto mailbox = std::make_shared<MediaSoupMailbox>();
 			AssignProducer(id, ptr, mailbox);
 
@@ -345,13 +345,13 @@ MediaSoupTransceiver::CreateProducerAudioTrack(rtc::scoped_refptr<webrtc::PeerCo
 	options.auto_gain_control = false;
 	options.noise_suppression = true;
 	options.echo_cancellation = false;
-	options.residual_echo_detector = false;
-	options.experimental_agc = false;
-	options.experimental_ns = false;
-	options.typing_detection = false;
+	//options.residual_echo_detector = false;
+	//options.experimental_agc = false;
+	//options.experimental_ns = false;
+	//options.typing_detection = false;
 
 	rtc::scoped_refptr<webrtc::AudioSourceInterface> source = factory->CreateAudioSource(options);
-	return factory->CreateAudioTrack(label, source);
+	return factory->CreateAudioTrack(label, source.get());
 }
 
 bool MediaSoupTransceiver::CreateAudioConsumer(const std::string &id, const std::string &producerId, json *rtpParameters, obs_source_t *source)

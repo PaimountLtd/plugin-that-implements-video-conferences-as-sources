@@ -5,7 +5,7 @@
 // This is a singleton
 MyLogSink::MyLogSink()
 {
-	rtc::LogMessage::AddLogToStream(this, rtc::WARNING);
+	rtc::LogMessage::AddLogToStream(this, rtc::LoggingSeverity::LS_WARNING);
 }
 
 MyLogSink::~MyLogSink()
