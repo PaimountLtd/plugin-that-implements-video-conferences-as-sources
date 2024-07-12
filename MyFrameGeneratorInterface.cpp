@@ -14,7 +14,7 @@ MyFrameGeneratorInterface::MyFrameGeneratorInterface(int width, int height, Outp
 void MyFrameGeneratorInterface::ChangeResolution(size_t width, size_t height) {}
 webrtc::test::FrameGeneratorInterface::Resolution MyFrameGeneratorInterface::GetResolution() const
 {
-	return { static_cast<size_t>(m_width), static_cast<size_t>(m_height) };
+	return {static_cast<size_t>(m_width), static_cast<size_t>(m_height)};
 }
 
 webrtc::test::FrameGeneratorInterface::VideoFrameData MyFrameGeneratorInterface::NextFrame()
@@ -28,7 +28,10 @@ webrtc::test::FrameGeneratorInterface::VideoFrameData MyFrameGeneratorInterface:
 	return VideoFrameData(m_lastFrame, absl::nullopt);
 }
 
-absl::optional<int> MyFrameGeneratorInterface::fps() const { return absl::nullopt; }
+absl::optional<int> MyFrameGeneratorInterface::fps() const
+{
+	return absl::nullopt;
+}
 
 FrameGeneratorCapturerVideoTrackSource::FrameGeneratorCapturerVideoTrackSource(Config config, webrtc::Clock *clock, bool is_screencast,
 									       std::shared_ptr<MediaSoupMailbox> mailbox)
