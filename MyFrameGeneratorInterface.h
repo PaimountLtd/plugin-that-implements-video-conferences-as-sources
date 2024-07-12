@@ -12,8 +12,11 @@ public:
 	MyFrameGeneratorInterface(int width, int height, OutputType type, std::shared_ptr<MediaSoupMailbox> mailbox);
 
 	void ChangeResolution(size_t width, size_t height) override;
+	Resolution GetResolution() const override;
 
 	VideoFrameData NextFrame() override;
+
+	absl::optional<int> fps() const override;
 
 private:
 	const int m_width;

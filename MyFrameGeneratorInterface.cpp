@@ -8,10 +8,14 @@ MyFrameGeneratorInterface::MyFrameGeneratorInterface(int width, int height, Outp
 	: m_mailbox(mailbox), m_width(width), m_height(height)
 {
 	m_lastFrame = webrtc::I420Buffer::Create(width, height);
-	webrtc::I420Buffer::SetBlack(m_lastFrame);
+	webrtc::I420Buffer::SetBlack(m_lastFrame.get());
 }
 
 void MyFrameGeneratorInterface::ChangeResolution(size_t width, size_t height) {}
+webrtc::test::FrameGeneratorInterface::Resolution MyFrameGeneratorInterface::GetResolution() const
+{
+	return {static_cast<size_t>(m_width), static_cast<size_t>(m_height)};
+}
 
 webrtc::test::FrameGeneratorInterface::VideoFrameData MyFrameGeneratorInterface::NextFrame()
 {
@@ -22,6 +26,11 @@ webrtc::test::FrameGeneratorInterface::VideoFrameData MyFrameGeneratorInterface:
 		m_lastFrame = frames[frames.size() - 1];
 
 	return VideoFrameData(m_lastFrame, absl::nullopt);
+}
+
+absl::optional<int> MyFrameGeneratorInterface::fps() const
+{
+	return absl::nullopt;
 }
 
 FrameGeneratorCapturerVideoTrackSource::FrameGeneratorCapturerVideoTrackSource(Config config, webrtc::Clock *clock, bool is_screencast,

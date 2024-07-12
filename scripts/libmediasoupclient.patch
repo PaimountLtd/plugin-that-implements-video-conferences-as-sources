@@ -1,0 +1,26 @@
+--- a/CMakeLists.txt	2024-07-11 20:38:24.134524700 -0400
++++ b/CMakeLists.txt	2024-07-07 22:19:15.810910700 -0400
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.14)
++cmake_minimum_required(VERSION 3.20)
+ 
+ project(mediasoupclient LANGUAGES CXX)
+ 
+@@ -17,7 +17,7 @@
+ )
+ 
+ # C++ standard requirements.
+-set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ # Project options.
+@@ -56,6 +56,8 @@
+ 	endif()
+ endif()
+ 
++set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
++
+ if (${MEDIASOUPCLIENT_BUILD_TESTS})
+ 	add_subdirectory(test)
+ endif()
