@@ -1,5 +1,6 @@
 set MSVC_TOOL_PATH="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.36.32532\bin\Hostx64\x64"
 set Z7_PATH="C:\Program Files\7-Zip"
+set SCRIPT_FULL_FILENAME=%ORIGINAL_WORK_DIR%\%~n0%~x0
 set ORIGINAL_WORK_DIR=%CD%
 
 set DEPOT_TOOLS=depot_tools
@@ -96,6 +97,8 @@ echo f | xcopy "%SRC_DIR%\test\vcm_capturer.cc" "%PACKAGE_DIR%\test\vcm_capturer
   "%BUILD_DIR%\obj\api\video_codecs\builtin_video_decoder_factory.lib" ^
   "%BUILD_DIR%\obj\media\rtc_internal_video_codecs.lib" ^
   "%BUILD_DIR%\obj\media\rtc_simulcast_encoder_adapter.lib"
+
+echo f | xcopy "%SCRIPT_FULL_FILENAME%" "%PACKAGE_DIR%" /yf
 
 :skip_copying
 
