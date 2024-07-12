@@ -40,6 +40,8 @@ download_libmediasoupclient() {
 }
 
 build_libmediasoupclient() {
+    cd "${GIT_FOLDER}"
+
     # Prepare build parameters
     case "${ARCHITECTURE}" in
         arm64)
