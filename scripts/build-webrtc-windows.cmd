@@ -10,11 +10,11 @@ echo "### Download depot tools..."
 set DEPOT_TOOLS_URL=https://storage.googleapis.com/chrome-infra/%DEPOT_TOOLS%.zip
 if exist %DEPOT_TOOLS%.zip (curl -kLO %DEPOT_TOOLS_URL% -f --retry 5 -z %DEPOT_TOOLS%.zip) else (curl -kLO %DEPOT_TOOLS_URL% -f --retry 5 -C -)
 
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 powershell -command "Expand-Archive -Force '%~dp0%DEPOT_TOOLS%.zip' '%DEPOT_TOOLS%'"
 
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 :skip_depot_install
 
@@ -31,7 +31,7 @@ cd %CHECKOUT_DIR%
 call fetch --nohooks webrtc
 call gclient sync
 
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 set SRC_DIR=%CHECKOUT_DIR%\src
 
@@ -42,7 +42,7 @@ cd %SRC_DIR%
 call git checkout -b %WEBRTC_BRANCH% %WEBRTC_BRANCH_PATH%
 call gclient sync -D
 
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 :skip_webrtc_checkout
 
@@ -54,10 +54,10 @@ if exist %BUILD_DIR%\ goto skip_webrtc_build
 echo "### Webrtc building..."
 
 call gn gen out\%WEBRTC_BRANCH% --args="is_debug=false is_component_build=false is_clang=true rtc_include_tests=true use_rtti=true rtc_build_examples=false use_custom_libcxx=false enable_iterator_debugging=false libcxx_is_shared=false rtc_build_tools=false use_lld=false treat_warnings_as_errors=false  use_custom_libcxx_for_host=false target_os=\"win\" target_cpu=\"x64\""
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 call ninja -j6 -C out\%WEBRTC_BRANCH% 
-if %errorlevel% neq 0 exit /b %errorlevel%
+if %errorlevel% neq 0 goto end
 
 :skip_webrtc_build
 
@@ -103,5 +103,9 @@ cd %ORIGINAL_WORK_DIR%
 
 echo "### 7z-ing..."
 
-set PACKAGE_FILE=webrtc-%WEBRTC_BRANCH%-windows-x64.7z
+set PACKAGE_FILE=webrtc-%WEBRTC_BRANCH%-win-x64.7z
 %Z7_PATH%\7z.exe a %PACKAGE_FILE% %PACKAGE_FOLDER_NAME%
+
+:end
+
+cd %ORIGINAL_WORK_DIR%
